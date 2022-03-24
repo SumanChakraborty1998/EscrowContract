@@ -101,9 +101,9 @@ contract("Escrow Contract Testing", async (accounts) => {
 
   it("Verification is only possible, when the contract is already completed by the beneficiary", async () => {
     try {
-      await instance.createContract(accounts[5], 20000, {
+      await instance.createContract(accounts[5], 10000000000000, {
         from: user,
-        value: 25000,
+        value: 20000000000000,
       });
 
       const contractCount = (await instance.contractsCount()).toNumber();
