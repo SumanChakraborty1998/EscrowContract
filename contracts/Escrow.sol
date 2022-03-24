@@ -14,7 +14,7 @@ contract Escrow {
     }
 
     mapping(uint256 => Contract) private contracts;
-    mapping(uint256 => bool) private contractsAvailability;
+    mapping(uint256 => bool) public contractsAvailability;
 
     event ContractSuccesfull(
         uint256 indexed id,
@@ -33,7 +33,7 @@ contract Escrow {
             "amount must be equal or lesss then to msg.value"
         );
 
-        amt = amt * 10**18;
+        // amt = amt * 10**18;
         contractsCount++;
         contracts[contractsCount] = Contract(
             contractsCount,
@@ -56,6 +56,28 @@ contract Escrow {
         );
     }
 
+    function viewContract(uint256 id)
+        external
+        view
+        returns (
+            address owner,
+            address beneficiary,
+            uint256 fees,
+            bool isCompleted,
+            bool isVerified
+        )
+    {
+        require(contractsAvailability[id] == true, "contract is not available");
+        require(contracts[id].owner == msg.sender, "You are not the owner");
+        return (
+            contracts[id].owner,
+            contracts[id].beneficiary,
+            contracts[id].fees,
+            contracts[id].isCompleted,
+            contracts[id].isVerified
+        );
+    }
+
     function completeContract(uint256 id) external {
         require(
             msg.sender == contracts[id].beneficiary,
@@ -69,7 +91,7 @@ contract Escrow {
     function verifyContract(uint256 id) external {
         require(
             msg.sender == contracts[id].owner,
-            "only owner can release payment"
+            "only owner can Verify the contract"
         );
         require(contractsAvailability[id] == true, "contract is not available");
         require(
@@ -98,8 +120,7 @@ contract Escrow {
             "contract is not verified by the owner"
         );
 
-        payable(contracts[id].beneficiary).transfer(
-            contracts[id].fees * 10**18
-        );
+        payable(contracts[id].beneficiary).transfer(contracts[id].fees);
+        contractsAvailability[id] = false;
     }
 }

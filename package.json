@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/SumanChakraborty1998/EscrowContract/issues"
   },
-  "homepage": "https://github.com/SumanChakraborty1998/EscrowContract#readme"
+  "homepage": "https://github.com/SumanChakraborty1998/EscrowContract#readme",
+  "dependencies": {
+    "truffle-assertions": "^0.9.2"
+  }
 }
